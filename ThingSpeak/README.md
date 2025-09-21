@@ -1,0 +1,8 @@
+- Create an account at https://thingspeak.mathworks.com/
+- Go to Channels
+- Create a new channel
+- Set the name and fields
+- Copy the code and paste it into the Arduino IDE
+- Set the SSID and password (Wi-Fi network information)
+- Set the channel ID and write API key in the code (you can find these in the ThingSpeak dashboard)
+- Verify and upload the code — you should see data transferred from your module to ThingSpeak
