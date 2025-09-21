@@ -1,0 +1,1 @@
+Compatible with `TFT_eSPI 2.5.43 by Bodmer`
