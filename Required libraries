@@ -10,3 +10,4 @@ Required libraries:
 8.MQ135 by Georgk,ViliusKraujutis,NuclearPhoenixx
 9.SparkFun MAX3010x Pulse and Proximity Sensor Library by SparkFun Electronics
 10.ThingSpeak by MathWorks
+11.TFT_eSPI by Bodmer
