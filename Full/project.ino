@@ -12,18 +12,24 @@ long lastBeat = 0;
 float beatsPerMinute;   
 int beatAvg;
 
+int maxRetries = 5;
+int retryCount = 0;
+
 void setup() {
   Serial.begin(115200);
   delay(100);
-  
-  WiFi.begin(ssid, password);
-  Serial.print("Connecting...");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(1000);
+
+  while (WiFi.status() != WL_CONNECTED && retryCount < maxRetries) {
+    delay(2000);
+    retryCount++;
   }
 
-  Serial.println('\n');
-  Serial.println("Connection established!");
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("WiFi connection failed!");
+  }
+  else {
+    Serial.println("Connection established!");
+  }
 
   if (!particleSensor.begin(Wire, I2C_SPEED_FAST))
   {
