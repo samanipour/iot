@@ -1,0 +1,1 @@
+Example for the operation of the BH1750 light detection sensor
