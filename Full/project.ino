@@ -2,11 +2,14 @@
 #include <Wire.h>
 #include "MAX30105.h"
 #include "heartRate.h"
+#include <BH1750.h>
 
 MAX30105 HeartSensor;
 long lastBeat = 0;
 float beatsPerMinute = 0;   
 int beatAvg = 0;
+
+BH1750 lightMeter;
 
 bool Connection_setup(String ssid, String password) {
   int maxRetries = 5;
@@ -58,9 +61,32 @@ long MAX30105_loop() {
   }
 }
 
+bool BH1750_setup() {
+
+  if (!lightMeter.begin()) {
+    return false;
+  }
+  return true;
+
+}
+
+float BH1750_loop() {
+  float lux = lightMeter.readLightLevel();
+  return lux;
+}
+
+void Print_status(bool func, String name) {
+  if (!func) {
+    Serial.println(name + "Failed!");
+  } else {
+    Serial.println(name + "initialized.");
+  }
+}
+
 void setup() {
   Serial.begin(115200);
   delay(100);
+  Wire.begin(D2, D1);  // SDA, SCL
 
   if (!Connection_setup("ssid", "password")) {
     Serial.println("WiFi Connection Failed!");
@@ -68,12 +94,10 @@ void setup() {
     Serial.println("WiFi Connected!");
   }
 
-  if (!MAX30105_setup()) {
-    Serial.println("MAX30105 not found!");
-  }
-  else {
-    Serial.println("MAX30105 initialized.");
-  }
+  Print_status(MAX30105_setup(), "MAX30105");
+
+  Print_status(BH1750_setup(), "BH1750");
+
 }
 
 void loop() {
@@ -81,5 +105,13 @@ void loop() {
   if (!Connection_loop()) {
     Serial.println("WiFi Disconnected!");
   }
+
+  long bpm = MAX30105_loop();
+  if(bpm != -1) Serial.println("BPM: " + String(bpm));
+
+  float lux = BH1750_loop();
+  Serial.println("Lux: " + String(lux));
+
+  delay(1000);
 
 }
