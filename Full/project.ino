@@ -19,6 +19,8 @@ void setup() {
   Serial.begin(115200);
   delay(100);
 
+  WiFi.begin(ssid, password);
+
   while (WiFi.status() != WL_CONNECTED && retryCount < maxRetries) {
     delay(2000);
     retryCount++;
