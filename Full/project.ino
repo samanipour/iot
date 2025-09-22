@@ -3,6 +3,7 @@
 #include "MAX30105.h"
 #include "heartRate.h"
 #include <BH1750.h>
+// #include <TFT_eSPI.h>
 
 MAX30105 HeartSensor;
 long lastBeat = 0;
@@ -10,6 +11,11 @@ float beatsPerMinute = 0;
 int beatAvg = 0;
 
 BH1750 lightMeter;
+
+// TFT_eSPI tft = TFT_eSPI();
+// int cursorX = 10;
+// int cursorY = 10;
+// int lineHeight = 35;
 
 bool Connection_setup(String ssid, String password) {
   int maxRetries = 5;
@@ -75,6 +81,22 @@ float BH1750_loop() {
   return lux;
 }
 
+// bool TFT_setup() {
+  
+//   tft.begin();
+//   return true;
+
+// }
+
+// void TFT_loop(String text, int size) {
+//   tft.setTextSize(size);
+//   tft.drawString(text, cursorX, cursorY);
+//   if(cursorY + lineHeight > tft.height()) {
+//     tft.fillScreen(TFT_BLACK);
+//     cursorY = 10;
+//   }
+// }
+
 void Print_status(bool func, String name) {
   if (!func) {
     Serial.println(name + "Failed!");
@@ -98,6 +120,8 @@ void setup() {
 
   Print_status(BH1750_setup(), "BH1750");
 
+  // Print_status(TFT_setup(), "TFT Display");
+
 }
 
 void loop() {
@@ -111,6 +135,8 @@ void loop() {
 
   float lux = BH1750_loop();
   Serial.println("Lux: " + String(lux));
+
+  // TFT_loop("Lux: " + String(lux), 3);
 
   delay(1000);
 
