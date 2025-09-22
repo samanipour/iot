@@ -3,22 +3,14 @@
 #include "MAX30105.h"
 #include "heartRate.h"
 
-MAX30105 particleSensor;
-
-const char* ssid     = "ssid";
-const char* password = "password";
-
+MAX30105 HeartSensor;
 long lastBeat = 0;
-float beatsPerMinute;   
-int beatAvg;
+float beatsPerMinute = 0;   
+int beatAvg = 0;
 
-int maxRetries = 5;
-int retryCount = 0;
-
-void setup() {
-  Serial.begin(115200);
-  delay(100);
-
+bool Connection_setup(String ssid, String password) {
+  int maxRetries = 5;
+  int retryCount = 0;
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED && retryCount < maxRetries) {
@@ -27,24 +19,28 @@ void setup() {
   }
 
   if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi connection failed!");
+    return false;
   }
   else {
-    Serial.println("Connection established!");
+    return true;
   }
-
-  if (!particleSensor.begin(Wire, I2C_SPEED_FAST))
-  {
-    Serial.println("MAX30105 not found.");
-    while (1);
-  }
-
-  particleSensor.setup();
-
 }
 
-void loop() {
-  long irValue = particleSensor.getIR();
+bool Connection_loop() {
+  return WiFi.status() == WL_CONNECTED;
+}
+
+bool MAX30105_setup() {
+  if (!HeartSensor.begin(Wire, I2C_SPEED_FAST)) {
+    return false;
+  }
+
+  HeartSensor.setup();
+  return true;
+}
+
+long MAX30105_loop() {
+  long irValue = HeartSensor.getIR();
 
   if (checkForBeat(irValue) == true) {
     long delta = millis() - lastBeat;
@@ -55,9 +51,35 @@ void loop() {
     if (beatsPerMinute < 255 && beatsPerMinute > 20) {
       beatAvg = (beatAvg * 0.9) + (beatsPerMinute * 0.1);
     }
+    return beatAvg;
+  }
+  else {
+    return -1;
+  }
+}
 
-    Serial.print("BPM: ");
-    Serial.println(beatAvg);
+void setup() {
+  Serial.begin(115200);
+  delay(100);
+
+  if (!Connection_setup("ssid", "password")) {
+    Serial.println("WiFi Connection Failed!");
+  } else {
+    Serial.println("WiFi Connected!");
+  }
+
+  if (!MAX30105_setup()) {
+    Serial.println("MAX30105 not found!");
+  }
+  else {
+    Serial.println("MAX30105 initialized.");
+  }
+}
+
+void loop() {
+
+  if (!Connection_loop()) {
+    Serial.println("WiFi Disconnected!");
   }
 
 }
