@@ -4,6 +4,7 @@
 #include "heartRate.h"
 #include <BH1750.h>
 #include <MQ135.h>
+#include "ThingSpeak.h"
 
 MAX30105 HeartSensor;
 long lastBeat = 0;
@@ -16,6 +17,10 @@ TFT_eSPI tft = TFT_eSPI();
 
 #define PIN_MQ135 A0
 MQ135 mq135_sensor(PIN_MQ135);
+
+WiFiClient client;
+unsigned long myChannelNumber = 1;
+const char * myWriteAPIKey = "A";
 
 bool Connection_setup(String ssid, String password) {
   int maxRetries = 5;
@@ -124,6 +129,9 @@ void setup() {
 
   Print_status(TFT_setup(), "TFT Display");
 
+  ThingSpeak.begin(client);
+
+
 }
 
 void loop() {
@@ -135,14 +143,24 @@ void loop() {
   // long bpm = MAX30105_loop();
   // if(bpm != -1) Serial.println("BPM: " + String(bpm));
 
-  // float lux = BH1750_loop();
-  // Serial.println("Lux: " + String(lux));
+  float lux = BH1750_loop();
+  Serial.println("Lux: " + String(lux));
 
-  TFT_loop();
+  // TFT_loop();
 
-  // float ppm = MQ135_loop();
-  // Serial.println("PPM: " + String(ppm));
+  float ppm = MQ135_loop();
+  Serial.println("PPM: " + String(ppm));
 
-  delay(1000);
+  ThingSpeak.setField(1, ppm);
+  ThingSpeak.setField(2, lux);
 
+  int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
+  if(x == 200){
+    Serial.println("Channel update successful.");
+  }
+  else{
+    Serial.println("Problem updating channel. HTTP error code " + String(x));
+  }
+
+  delay(20000);
 }
