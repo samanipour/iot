@@ -1,4 +1,14 @@
+
+#include <MQ135.h>
 #include <TFT_eSPI.h>
+
+#define PIN_MQ135 A0
+MQ135 mq135_sensor(PIN_MQ135);
+
+float temperature = 21.0; // Assume current temperature. Recommended to measure with DHT22
+float humidity = 25.0; // Assume current humidity. Recommended to measure with DHT22
+
+
 TFT_eSPI tft = TFT_eSPI();   // Invoke library
 
 int cursorX = 10;     // فاصله از چپ
@@ -6,11 +16,15 @@ int cursorY = 10;     // موقعیت y شروع
 int lineHeight = 35;  // فاصله بین خطوط
 
 
+
 void setup(void) {
   Serial.begin(115200);
   Serial.print("ST7789 TFT Bitmap Test");
 
-  tft.begin();     // initialize a ST7789 chip
+
+  tft.begin();
+
+       // initialize a ST7789 chip
   tft.setSwapBytes(true); // Swap the byte order for pushImage() - corrects endianness
 
   tft.setTextColor(TFT_GREEN, TFT_BLACK);  // رنگ متن سفید با پس‌زمینه مشکی
@@ -33,13 +47,20 @@ void printLine(String text, int size) {
 
 
 void loop() {
+    float ppm = mq135_sensor.getPPM();
+    float correctedPPM = mq135_sensor.getCorrectedPPM(temperature, humidity);
+
     tft.fillScreen(TFT_BLACK);
     cursorY = 10;  // بازنشانی موقعیت y به بالا
 
    
+    printLine("PPM:",2);
+    printLine(String(ppm, 2),3);
+    printLine("Corrected PPM:",2);
+    printLine(String(correctedPPM, 2),3);
     // tft.setCursor(30, 30);        // مکان شروع
-    printLine("Heart beat:",2);
-    printLine("72",3);
+    // printLine("Heart beat:",2);
+    // printLine("72",3);
     // printLine("Spo2: 150",2);
     // printLine("Air quality:",2);
     // printLine("324 ppm",2);
@@ -53,7 +74,7 @@ void loop() {
     // tft.drawString("Air quality:",20,150);
 
 
-    delay(1500);
+    delay(500);
 
 }
 

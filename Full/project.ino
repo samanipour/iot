@@ -3,8 +3,6 @@
 #include "MAX30105.h"
 #include "heartRate.h"
 #include <BH1750.h>
-// #include <TFT_eSPI.h>
-#include <MQ135.h>
 
 MAX30105 HeartSensor;
 long lastBeat = 0;
@@ -12,11 +10,6 @@ float beatsPerMinute = 0;
 int beatAvg = 0;
 
 BH1750 lightMeter;
-
-TFT_eSPI tft = TFT_eSPI();
-
-#define PIN_MQ135 A0
-MQ135 mq135_sensor(PIN_MQ135);
 
 bool Connection_setup(String ssid, String password) {
   int maxRetries = 5;
@@ -82,24 +75,6 @@ float BH1750_loop() {
   return lux;
 }
 
-bool TFT_setup() {
-  tft.begin();
-  tft.setSwapBytes(true);
-  tft.setTextColor(TFT_GREEN, TFT_BLACK);
-
-  return true;
-
-}
-
-void TFT_loop() {
-  tft.fillScreen(TFT_RED);
-}
-
-long MQ135_loop() {
-  float ppm = mq135_sensor.getPPM();
-  return ppm;
-}
-
 void Print_status(bool func, String name) {
   if (!func) {
     Serial.println(name + "Failed!");
@@ -123,8 +98,6 @@ void setup() {
 
   Print_status(BH1750_setup(), "BH1750");
 
-  Print_status(TFT_setup(), "TFT Display");
-
 }
 
 void loop() {
@@ -136,13 +109,8 @@ void loop() {
   // long bpm = MAX30105_loop();
   // if(bpm != -1) Serial.println("BPM: " + String(bpm));
 
-  // float lux = BH1750_loop();
-  // Serial.println("Lux: " + String(lux));
-
-  TFT_loop();
-
-  // float ppm = MQ135_loop();
-  // Serial.println("PPM: " + String(ppm));
+  float lux = BH1750_loop();
+  Serial.println("Lux: " + String(lux));
 
   delay(1000);
 
