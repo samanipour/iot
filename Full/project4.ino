@@ -118,6 +118,11 @@ bool MAX30105_setup() {
 //   return beatAvg;
 // }
 
+long IR_to_heartBeat(long x) {
+    const double inv = 1.0 / 505.0;
+    return (long)(x * inv);
+}
+
 bool BH1750_setup() {
 
   if (!lightMeter.begin()) {
@@ -215,9 +220,10 @@ void loop() {
   if (!Connection_loop()) {
     Serial.println("WiFi Disconnected!");
   }
-
+  
   long bpm = HeartSensor.getIR();
-  Serial.println("BPM: " + String(bpm));
+  long heartbeat_var = IR_to_heartBeat(bpm);
+  Serial.println("BPM: " + String(heartbeat_var));
 
   float lux = BH1750_loop();
   Serial.println("Lux: " + String(lux));
