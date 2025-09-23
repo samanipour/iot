@@ -217,7 +217,7 @@ void loop() {
 
   ThingSpeak.setField(1, ppm);
   ThingSpeak.setField(2, lux);
-  ThingSpeak.setField(3, bpm);
+  ThingSpeak.setField(3, heartbeat_var);
 
 
   
@@ -230,7 +230,7 @@ void loop() {
   printLine("LUX:",1);
   printLine(String(lux, 2),2);
   printLine("Heartrate:",1);
-  printLine(String(bpm),2);
+  printLine(String(heartbeat_var),2);
 
   int x = ThingSpeak.writeFields(myChannelNumber, myWriteAPIKey);
   // if(x == 200){
