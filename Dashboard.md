@@ -1,12 +1,12 @@
 IOT-Device 1:
-https://thingspeak.mathworks.com/channels/3084723
+- https://thingspeak.mathworks.com/channels/3084723
 
 IOT-Device 2:
-https://thingspeak.mathworks.com/channels/3086426
+- https://thingspeak.mathworks.com/channels/3086426
 
 IOT-Device 3:
-https://thingspeak.mathworks.com/channels/3086432
+- https://thingspeak.mathworks.com/channels/3086432
 
 IOT-Device 4:
-https://thingspeak.mathworks.com/channels/3086440
+- https://thingspeak.mathworks.com/channels/3086440
 
