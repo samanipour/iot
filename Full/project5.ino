@@ -124,7 +124,17 @@ bool MAX30105_setup() {
 
 long IR_to_heartBeat(long x) {
     const double inv = 1.0 / 505.0;
-    return (long)(x * inv);
+    long result = (long)(x * inv)
+    if (result > 99 && result < 110) {
+      result-=10;
+    } else if (result > 109 && result < 120) {
+      result-=20;
+    } else if (result > 119 && result < 130) {
+      result-=30;
+    } else {
+      result-= 50;
+    }
+    return result;
 }
 
 
