@@ -5,8 +5,6 @@
 #define PIN_MQ135 A0
 MQ135 mq135_sensor(PIN_MQ135);
 
-float temperature = 21.0; // Assume current temperature. Recommended to measure with DHT22
-float humidity = 25.0; // Assume current humidity. Recommended to measure with DHT22
 
 
 TFT_eSPI tft = TFT_eSPI();   // Invoke library
