@@ -10,3 +10,5 @@ IOT-Device 3:
 IOT-Device 4:
 - https://thingspeak.mathworks.com/channels/3086440
 
+IOT-Device 5:
+- https://thingspeak.mathworks.com/channels/3084750
