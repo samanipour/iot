@@ -146,8 +146,8 @@
 
 // In ESP8266 overlap mode the TFT chip select MUST connect to pin D3
 //#define TFT_CS   PIN_D3
-#define TFT_DC   PIN_D1  // Data Command control pin
-#define TFT_RST  PIN_D0  // Reset pin (could connect to NodeMCU RST, see next line)
+#define TFT_DC   PIN_D0  // Data Command control pin
+#define TFT_RST  PIN_D3  // Reset pin (could connect to NodeMCU RST, see next line)
 //#define TFT_RST  -1  // Set TFT_RST to -1 if the display RESET is connected to NodeMCU RST or 3.3V
 
 
